@@ -1,6 +1,6 @@
 import os
 import requests
-from datetime import datetime
+import time
 
 # ==============================
 # CONFIGURACIÓN
@@ -10,12 +10,9 @@ TWELVE_DATA_API_KEY = os.getenv("TWELVE_DATA_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
-SYMBOL = "EUR/USD"
-INTERVAL = "5min"
-
 
 # ==============================
-# VALIDAR CONFIGURACIÓN
+# VERIFICAR CONFIGURACIÓN
 # ==============================
 
 def validar_configuracion():
@@ -36,21 +33,23 @@ def validar_configuracion():
             print(variable)
         return False
 
+    print("Configuración correcta.")
     return True
 
 
 # ==============================
-# OBTENER DATOS DE TWELVE DATA
+# ENVIAR MENSAJE A TELEGRAM
 # ==============================
 
-def obtener_datos():
-    url = "https://api.twelvedata.com/time_series"
+def enviar_telegram(mensaje):
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
 
-    parametros = {
-        "symbol": SYMBOL,
-        "interval": INTERVAL,
-        "outputsize": 100,
-        "apikey": TWELVE_DATA_API_KEY
+    datos = {
+        "chat_id": TELEGRAM_CHAT_ID,
+        "text": mensaje
     }
 
-    respuesta = requests.get(url,
+    respuesta = requests.post(url, data=datos, timeout=20)
+
+    if respuesta.status_code == 200:
+        print("Mensaje enviado a Telegram
