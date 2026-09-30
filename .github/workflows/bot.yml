@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Descargar código
+      - name: Descargar repositorio
         uses: actions/checkout@v4
 
       - name: Configurar Python
@@ -18,12 +18,11 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Instalar librerías
+      - name: Instalar dependencias
         run: |
-          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Ejecutar bot
+      - name: Ejecutar Bot Forex
         env:
           TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
